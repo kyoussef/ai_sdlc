@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Todo API
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /api/tasks:
+    get:
+      summary: List tasks
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: priority
+          schema: { type: string, enum: [low, med, high] }
+        - in: query
+          name: tag
+          schema: { type: string }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [createdAt, dueDate, priority] }
+        - in: query
+          name: order
+          schema: { type: string, enum: [asc, desc], default: desc }
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTask'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema: { type: string }
+  /api/tasks/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: Get task
+      responses:
+        '200': { description: OK }
+        '404': { description: Not Found }
+    put:
+      summary: Replace task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateTask' }
+      responses:
+        '200': { description: OK }
+        '400': { description: Validation Error }
+        '409': { description: Conflict }
+    patch:
+      summary: Partial update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                title: { type: string, minLength: 1, maxLength: 200 }
+                description: { type: string, maxLength: 1000 }
+                dueDate: { type: string, format: date }
+                priority: { type: string, enum: [low, med, high] }
+                tags:
+                  type: array
+                  maxItems: 10
+                  items: { type: string, maxLength: 30 }
+                completed: { type: boolean }
+      responses:
+        '200': { description: OK }
+        '400': { description: Validation Error }
+        '409': { description: Conflict }
+    delete:
+      summary: Soft delete task
+      responses:
+        '204': { description: No Content }
+        '404': { description: Not Found }
+components:
+  schemas:
+    CreateTask:
+      type: object
+      required: [title, priority]
+      properties:
+        title: { type: string, maxLength: 200 }
+        description: { type: string, maxLength: 1000, nullable: true }
+        dueDate: { type: string, format: date, nullable: true }
+        priority: { type: string, enum: [low, med, high] }
+        tags:
+          type: array
+          maxItems: 10
+          items: { type: string, maxLength: 30 }
+    UpdateTask:
+      allOf:
+        - $ref: '#/components/schemas/CreateTask'
+        - type: object
+          required: [completed]
+          properties:
+            completed: { type: boolean }

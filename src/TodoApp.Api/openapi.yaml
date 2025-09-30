@@ -1,0 +1,376 @@
+﻿openapi: 3.0.3
+info:
+  title: Todo App API
+  version: 1.0.0
+  description: REST API for managing tasks in the TodoApp solution.
+servers:
+  - url: https://localhost:5001
+    description: Local development (HTTPS)
+  - url: http://localhost:5000
+    description: Local development (HTTP)
+tags:
+  - name: Tasks
+    description: Manage tasks, including search, filtering, and lifecycle operations.
+  - name: Health
+    description: Infrastructure liveness probe.
+paths:
+  /api/tasks:
+    get:
+      tags: [Tasks]
+      summary: List tasks with optional filters.
+      description: |
+        Returns a paginated list of tasks. Results default to `createdAt desc` ordering.
+        Soft-deleted tasks are excluded.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: 1-based page index.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Number of items per page.
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Case-insensitive search term applied to title and description.
+        - in: query
+          name: priority
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [Low, Med, High]
+          style: form
+          explode: true
+          description: Optional priority filters (OR semantics).
+        - in: query
+          name: tag
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: Optional tag filters (OR semantics, trimmed).
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [createdAt, dueDate, priority]
+            default: createdAt
+          description: Sort field.
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction.
+      responses:
+        '200':
+          description: Tasks returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    post:
+      tags: [Tasks]
+      summary: Create a task.
+      description: Creates a new task after enforcing validation rules (title, due date, tag limits).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Relative URI of the newly created task.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /api/tasks/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Task identifier.
+    get:
+      tags: [Tasks]
+      summary: Retrieve a task by id.
+      responses:
+        '200':
+          description: Task found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Tasks]
+      summary: Replace a task.
+      description: Replaces the entire task resource, enforcing concurrency via rowVersion when supplied.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    patch:
+      tags: [Tasks]
+      summary: Partially update a task.
+      description: Applies partial updates. Null properties are ignored; concurrency enforced by rowVersion.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchTaskRequest'
+      responses:
+        '200':
+          description: Task updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      tags: [Tasks]
+      summary: Soft delete a task.
+      responses:
+        '204':
+          description: Task soft deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /health:
+    get:
+      tags: [Health]
+      summary: Service liveness probe.
+      responses:
+        '200':
+          description: Healthy.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: Service unavailable.
+components:
+  schemas:
+    TaskSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+        priority:
+          type: integer
+          description: 0=Low, 1=Med, 2=High
+          enum: [0, 1, 2]
+        tags:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+        completed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+      required: [id, title, priority, tags, completed, createdAt, updatedAt]
+    TaskDetail:
+      allOf:
+        - $ref: '#/components/schemas/TaskSummary'
+    TaskListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskSummary'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        total:
+          type: integer
+      required: [items, page, pageSize, total]
+    CreateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date
+        priority:
+          type: integer
+          enum: [0, 1, 2]
+        tags:
+          type: array
+          nullable: true
+          maxItems: 10
+          items:
+            type: string
+      required: [title, dueDate, priority]
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+        priority:
+          type: integer
+          enum: [0, 1, 2]
+        tags:
+          type: array
+          nullable: true
+          maxItems: 10
+          items:
+            type: string
+        completed:
+          type: boolean
+        rowVersion:
+          type: string
+          format: byte
+          nullable: true
+          description: Base64-encoded concurrency token. Supply when available to prevent lost updates.
+      required: [title, priority, completed]
+    PatchTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          nullable: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 1000
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+        priority:
+          type: integer
+          enum: [0, 1, 2]
+          nullable: true
+        tags:
+          type: array
+          nullable: true
+          maxItems: 10
+          items:
+            type: string
+        completed:
+          type: boolean
+          nullable: true
+        rowVersion:
+          type: string
+          format: byte
+          nullable: true
+      description: Null properties are ignored; non-null values replace existing data.
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        traceId:
+          type: string
+      required: [status]
+  responses:
+    BadRequest:
+      description: Validation failure.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Conflict:
+      description: Concurrency conflict.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
