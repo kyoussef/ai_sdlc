@@ -11,10 +11,14 @@ Please perform a comprehensive code review by comparing the git differences betw
 Evaluate the changes against these criteria:
 
 ### Code Quality & Standards
+
+For every bulk of change in a file, analyze and provide your feedback, positive and negative and why in both cases. 
 - **Coding practices**: Following established patterns and conventions
 - **Code style**: Consistency with project style guidelines
 - **Design patterns**: Proper implementation of architectural patterns
 - **SOLID principles**: Adherence to software design principles
+- **UI and UX**: Adherence to the general UI/UX principles adopted by the project, and UI mockups, and common sense of laying out components and controls. 
+- **Performance Considerations**: If the adopted method is the best method in terms of performance, would there be edge cases that might break it or cause performance issues. 
 
 ### Functional Analysis
 - **Business logic**: Alignment with requirements and business rules
@@ -27,28 +31,4 @@ Evaluate the changes against these criteria:
 - **Maintainability**: Code readability and future maintenance considerations
 - **Testing**: Test coverage and testability of changes
 
-## Output Format
-Provide your analysis in the following structure:
-
-### Summary
-- Brief overview of changes
-- Overall assessment (Approve/Needs Changes/Reject)
-
-### Detailed Findings
-#### ✅ Positive Aspects
-- What was done well
-
-#### ⚠️ Issues Found
-- Critical issues requiring immediate attention
-- Minor improvements suggested
-
-#### 🔧 Recommendations
-- Specific actionable improvements
-- Best practice suggestions
-
-### Risk Assessment
-- Security implications
-- Performance impact
-- Breaking change potential
-
-Please be thorough but concise, focusing on actionable feedback that improves code quality.
+Please be thorough in your explanation, focusing on actionable feedback that improves code quality.

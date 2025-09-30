@@ -575,9 +575,12 @@ The following are the steps you need to do to experiment with this practice:
 
 ```text
 Follow instructions in file @code_review_prompt.md to review code changes between branch "import_tasks" and branch "master" 
-Write your results to new file under docs/review_results.md
+Write your results to new file under docs/review_results.md and include snippets from the git diff to highlight the location of the issue. 
 ```
 
+**Example Output:**
+
+Find the output in file docs/review_results.md file, it contain review notes on every change with suggestions. The main risk was in how the CSV was consumed, there are edge cases that are not considered. 
 
 
 ## Phase 6: Documentation 
