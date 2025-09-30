@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -36,7 +40,8 @@ public class TaskServiceTests
     {
         var req = new CreateTaskRequest(title!, null, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)), TaskPriority.Low, null);
         var sut = new TaskService(_repo.Object);
-        Func<Task> act = () => sut.CreateAsync(req, CancellationToken.None);        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*Title is required*");
+        Func<Task> act = () => sut.CreateAsync(req, CancellationToken.None);
+        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*Title is required*");
     }
 
     [Fact]
@@ -44,7 +49,8 @@ public class TaskServiceTests
     {
         var req = new CreateTaskRequest("Title", null, null, TaskPriority.Low, null);
         var sut = new TaskService(_repo.Object);
-        Func<Task> act = () => sut.CreateAsync(req, CancellationToken.None);        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*Due date is required*");
+        Func<Task> act = () => sut.CreateAsync(req, CancellationToken.None);
+        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*Due date is required*");
     }
 
     [Fact]
@@ -65,6 +71,37 @@ public class TaskServiceTests
         var sut = new TaskService(_repo.Object);
         Func<Task> act = () => sut.PatchAsync(Guid.NewGuid(), req, CancellationToken.None);
         await act.Should().ThrowAsync<ArgumentException>().WithMessage("*<= 1000*");
+    }
+
+    [Fact]
+    public async Task ImportAsync_ValidCsv_PersistsAllRows()
+    {
+        var csv = "title,description,dueDate,priority,tags\nBuy milk,,2025-10-01,Low,home;chores\nWrite report,Quarterly report,2025-10-05,High,work;urgent";
+        _repo.Setup(r => r.CreateAsync(It.IsAny<CreateTaskRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((CreateTaskRequest req, CancellationToken _) => new TaskDetailDto(Guid.NewGuid(), req.Title, req.Description, req.DueDate, req.Priority, req.Tags?.ToArray() ?? Array.Empty<string>(), false, DateTime.UtcNow, DateTime.UtcNow, null));
+
+        var sut = new TaskService(_repo.Object);
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+        var result = await sut.ImportAsync(stream, CancellationToken.None);
+
+        result.Successful.Should().Be(2);
+        result.Failed.Should().Be(0);
+        result.Errors.Should().BeEmpty();
+        _repo.Verify(r => r.CreateAsync(It.IsAny<CreateTaskRequest>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+    }
+
+    [Fact]
+    public async Task ImportAsync_InvalidRows_ReportErrors()
+    {
+        var csv = "title,dueDate,priority\nMissingDueDate,,Low\nBadPriority,2025-10-01,Invalid";
+        var sut = new TaskService(_repo.Object);
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+        var result = await sut.ImportAsync(stream, CancellationToken.None);
+
+        result.Successful.Should().Be(0);
+        result.Errors.Should().NotBeEmpty();
+        result.Failed.Should().Be(result.Errors.Count);
+        _repo.Verify(r => r.CreateAsync(It.IsAny<CreateTaskRequest>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
 

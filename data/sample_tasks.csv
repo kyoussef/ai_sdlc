@@ -1,0 +1,4 @@
+title,description,dueDate,priority,tags,completed
+Buy milk,,2025-10-01,Med,home;errands,false
+Write quarterly report,Compile metrics for leadership,2025-10-05,High,work;urgent,false
+Plan team offsite,Decide agenda and venue,2025-10-15,Low,work;planning,false

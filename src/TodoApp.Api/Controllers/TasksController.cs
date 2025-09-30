@@ -137,6 +137,29 @@ public class TasksController : ControllerBase
     }
 
     /// <summary>
+    /// Bulk imports tasks from a CSV file.
+    /// </summary>
+    /// <param name="file">CSV file containing task rows.</param>
+    /// <param name="ct">Propagated cancellation token.</param>
+    /// <returns>Summary of imported tasks including errors.</returns>
+    /// <response code="200">Import attempted and summary returned.</response>
+    /// <response code="400">No file provided or file empty.</response>
+    [HttpPost("import")]
+    [ProducesResponseType(typeof(TaskImportResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<TaskImportResult>> Import([FromForm] IFormFile? file, CancellationToken ct)
+    {
+        if (file is null || file.Length == 0)
+        {
+            return BadRequest(new { message = "A non-empty CSV file is required." });
+        }
+
+        await using var stream = file.OpenReadStream();
+        var result = await _service.ImportAsync(stream, ct);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Soft deletes a task by marking its deletion timestamp without removing the record.
     /// </summary>
     /// <param name="id">Identifier of the task to delete.</param>

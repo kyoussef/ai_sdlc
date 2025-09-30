@@ -558,11 +558,23 @@ The AI agents like Codex or Github copilot in your IDE usually are linked to Git
 This helps the reviewer empower their analysis with a broader perspective and deeper knowledge. 
 
 To be able to experiment with this project, you need to push it to a git repo. It can be an git based repo you have access to. 
+The following are the steps you need to do to experiment with this practice: 
+
+1- First push the workspace to a Github repo. You can use the AI agent as well to do this. 
+
+2- Create a new branch call it "import_tasks". You can use the AI agent as well to do this. 
+
+3- Ask the AI agent to implement a new feature, which is to add a button on the tasks page to enable users to import a list of predefined tasks in csv format. This is how it looks like after the implementation. 
+
+![Import Tasks](import_tasks.png)
+
+4- Commit and push the changes. 
+5- Now as the AI to pull the git difference between "master" branch and "import_tasks" and review the changes. 
 
 **Example Prompt:**
 
 ```text
-Follow instructions in file @code_review_prompt.md to review code changes between branch "import_tasks" and branch "main" 
+Follow instructions in file @code_review_prompt.md to review code changes between branch "import_tasks" and branch "master" 
 Write your results to new file under docs/review_results.md
 ```
 
