@@ -760,7 +760,7 @@ You are encouraged to read more about it, and adopt it to streamline and optimiz
 
 ### Prompt Optimization and templating
 
-## 1. Standardize Prompt Templates
+#### 1. Standardize Prompt Templates
 - Use consistent structure (system role, context, task, constraints, output format).
 - Break prompts into reusable building blocks (e.g., tone control, formatting instructions).
 - Define parameterized slots (`{input_text}`, `{domain}`, `{style}`) so the same template works across use cases.
@@ -776,9 +776,7 @@ prompt_template:
     Output Format: {output_format}
 ```
 
----
-
-## 2. Create a Prompt Library
+#### 2. Create a Prompt Library
 - Store prompts in a shared directory or repo (Markdown, JSON, YAML).
 - Include metadata:
   - Purpose / use case
@@ -787,64 +785,49 @@ prompt_template:
   - Known limitations
 - Version them like code, so teams can improve and roll back.
 
----
-
-## 3. Layered Prompting
+#### 3. Layered Prompting
 - Split prompts into layers:
   1. System/base prompt: establishes persona & role.
   2. Reusable instructions: common style/format rules.
   3. Task-specific template: narrow instructions.
 - Easier to tweak one layer without breaking the rest.
 
----
-
-## 4. Prompt Chaining
+#### 4. Prompt Chaining
 - Instead of one giant prompt, chain multiple smaller ones:
   - Step 1: extract entities
   - Step 2: transform into structured format
   - Step 3: generate narrative
 - Easier to debug, optimize, and reuse intermediate steps.
 
----
-
-## 5. Guardrails & Quality Checks
+#### 5. Guardrails & Quality Checks
 - Add self-check prompts inside templates:
   - “Review your output for accuracy, clarity, and compliance before finalizing.”
 - Encourage models to produce explanations + final answer, so you can trim explanations if not needed.
 
----
-
-## 6. Use Few-Shot & Style Anchors
+#### 6. Use Few-Shot & Style Anchors
 - Store canonical examples for tasks (few-shot samples).
 - Anchor desired tone/format with reusable "style snippets" (e.g., bullet summary, JSON output, docstring style).
 
----
-
-## 7. Parameterize Output Formats
+#### 7. Parameterize Output Formats
 - Define templates to support multi-format outputs:
   - Markdown report
   - JSON structure
   - Code snippet
 - Makes one prompt usable in different downstream systems.
 
----
-
-## 8. Prompt Testing & Benchmarking
+#### 8. Prompt Testing & Benchmarking
 - Keep a test harness (like unit tests for prompts):
   - Run prompts against known inputs/outputs.
   - Track consistency, failure cases, hallucinations.
 - Compare different versions to measure improvements.
 
----
-
-## 9. Documentation & Training
+#### 9. Documentation & Training
 - Document how and when to use each prompt.
 - Provide short “playbooks” for your team:
   - Good vs. bad examples
   - Edge cases
   - Tips for adapting prompts safely
 
----
 
 ✅ With these practices, your team will avoid prompt sprawl, make iterative improvements easier, and ensure high-value prompts are discoverable, reusable, and reliable.
 
