@@ -181,3 +181,17 @@ public record TaskQuery(
     TaskSortBy? Sort,
     SortOrder Order
 );
+
+/// <summary>
+/// Result returned after attempting to import tasks from a CSV file.
+/// </summary>
+/// <param name="Successful">Number of tasks persisted successfully.</param>
+/// <param name="Failed">Number of rows that failed validation or persistence.</param>
+/// <param name="Errors">Collection of human-readable error messages keyed by CSV line.</param>
+/// <param name="CreatedTaskIds">Identifiers generated for successfully imported tasks.</param>
+public record TaskImportResult(
+    int Successful,
+    int Failed,
+    IReadOnlyList<string> Errors,
+    IReadOnlyList<Guid> CreatedTaskIds
+);

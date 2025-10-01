@@ -115,6 +115,40 @@ public class TaskRepositoryTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task ListAsync_SortByDueDate_Ascending()
+    {
+        var now = DateTime.UtcNow;
+        await SeedAsync(
+            NewItem("Later", now.AddMinutes(-3), Priority.Med, dueDate: DateOnly.FromDateTime(now.AddDays(2))),
+            NewItem("Sooner", now.AddMinutes(-2), Priority.Med, dueDate: DateOnly.FromDateTime(now.AddDays(1)))
+        );
+
+        await using var db = new AppDbContext(_options);
+        var repo = new TaskRepository(db);
+        var query = new TaskQuery(1, 10, null, null, null, TaskSortBy.DueDate, SortOrder.Asc);
+        var res = await repo.ListAsync(query, CancellationToken.None);
+
+        res.Items.Select(x => x.Title).Should().ContainInOrder("Sooner", "Later");
+    }
+
+    [Fact]
+    public async Task ListAsync_SortByPriority_Descending()
+    {
+        var now = DateTime.UtcNow;
+        await SeedAsync(
+            NewItem("Low", now.AddMinutes(-3), Priority.Low),
+            NewItem("High", now.AddMinutes(-2), Priority.High)
+        );
+
+        await using var db = new AppDbContext(_options);
+        var repo = new TaskRepository(db);
+        var query = new TaskQuery(1, 10, null, null, null, TaskSortBy.Priority, SortOrder.Desc);
+        var res = await repo.ListAsync(query, CancellationToken.None);
+
+        res.Items.Select(x => x.Title).Should().ContainInOrder("High", "Low");
+    }
+
+    [Fact]
     public async Task CreateUpdatePatchDelete_Workflow_Works()
     {
         await using var db = new AppDbContext(_options);
@@ -140,7 +174,7 @@ public class TaskRepositoryTests : IAsyncLifetime
         listed.Items.Should().NotContain(x => x.Id == created.Id);
     }
 
-    private static TaskItem NewItem(string title, DateTime createdAt, Priority priority, string? description = null, List<string>? tags = null)
+    private static TaskItem NewItem(string title, DateTime createdAt, Priority priority, string? description = null, List<string>? tags = null, DateOnly? dueDate = null, bool completed = false)
     {
         return new TaskItem
         {
@@ -151,7 +185,8 @@ public class TaskRepositoryTests : IAsyncLifetime
             UpdatedAt = createdAt,
             Priority = priority,
             Tags = tags ?? new List<string>(),
-            Completed = false,
+            DueDate = dueDate,
+            Completed = completed,
             RowVersion = Guid.NewGuid().ToByteArray()
         };
     }

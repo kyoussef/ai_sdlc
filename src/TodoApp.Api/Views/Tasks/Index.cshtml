@@ -32,6 +32,8 @@
                 </button>
                 <div class="dropdown-menu p-2" id="tagsMenu" aria-labelledby="tagsDropdown" style="min-width:240px; max-height:300px; overflow:auto;"></div>
             </div>
+            <button id="import-btn" class="btn btn-outline-primary" type="button">Import CSV</button>
+            <input id="importFile" class="d-none" type="file" accept=".csv" />
             <select id="sortBy" class="form-select" aria-label="Sort by" style="min-width:160px">
                 <option value="createdAt" selected>Created</option>
                 <option value="dueDate">Due Date</option>

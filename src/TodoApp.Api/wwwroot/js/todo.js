@@ -26,6 +26,8 @@
     tagsDropdown: null,
     sortBy: null,
     sortOrder: null,
+    importBtn: null,
+    importFile: null,
     confirmModal: null,
     confirmTitle: null,
     confirmMessage: null,
@@ -75,14 +77,85 @@
     if (m) m.hide();
   }
 
-  function showErrorBanner(msg) {
-    els.errorBanner.textContent = msg || 'Something went wrong.';
-    els.errorBanner.classList.remove('d-none');
+  async function importCsv(file) {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      hideBanner();
+      if (els.importBtn) {
+        els.importBtn.disabled = true;
+        els.importBtn.setAttribute('aria-busy', 'true');
+      }
+      const res = await fetch('/api/tasks/import', {
+        method: 'POST',
+        body: formData
+      });
+      if (!res.ok) {
+        let problem;
+        try {
+          problem = await res.json();
+        } catch (_) {
+          problem = null;
+        }
+        const msg = problem?.message || problem?.detail || `Failed to import tasks (status ${res.status}).`;
+        showBanner(msg);
+        return;
+      }
+
+      const summary = await res.json();
+      const successful = summary.successful ?? 0;
+      const failed = summary.failed ?? (Array.isArray(summary.errors) ? summary.errors.length : 0);
+      const errors = Array.isArray(summary.errors) ? summary.errors : [];
+
+      if (errors.length > 0)
+      {
+        const detail = errors.slice(0, 5).join(' | ');
+        const message = `Imported ${successful} tasks with ${failed} errors. ${detail}`;
+        showBanner(message);
+      }
+      else
+      {
+        showBanner(`Imported ${successful} tasks successfully.`, 'success');
+      }
+
+      if (successful > 0)
+      {
+        state.page = 1;
+        await loadList();
+      }
+    }
+    catch (err)
+    {
+      console.error(err);
+      showBanner('Failed to import tasks. Please try again.');
+    }
+    finally
+    {
+      if (els.importBtn)
+      {
+        els.importBtn.disabled = false;
+        els.importBtn.removeAttribute('aria-busy');
+      }
+      if (els.importFile)
+      {
+        els.importFile.value = '';
+      }
+    }
   }
 
-  function hideErrorBanner() {
+  function showBanner(msg, type = 'error') {
+    const cls = type === 'success' ? 'alert-success' : 'alert-danger';
+    els.errorBanner.textContent = msg || 'Something went wrong.';
+    els.errorBanner.classList.remove('d-none', 'alert-danger', 'alert-success');
+    els.errorBanner.classList.add(cls);
+  }
+
+  function hideBanner() {
     els.errorBanner.textContent = '';
     els.errorBanner.classList.add('d-none');
+    els.errorBanner.classList.remove('alert-success', 'alert-danger');
+    els.errorBanner.classList.add('alert-danger');
   }
 
   function validateForm() {
@@ -220,15 +293,15 @@
               await loadList();
               closeConfirm();
             } else if (res.status === 404) {
-              showErrorBanner('Task not found (maybe already deleted).');
+              showBanner('Task not found (maybe already deleted).');
               closeConfirm();
               await loadList();
             } else {
-              showErrorBanner('Failed to delete task.');
+              showBanner('Failed to delete task.');
             }
           } catch (e) {
             console.error(e);
-            showErrorBanner('Network error while deleting task.');
+            showBanner('Network error while deleting task.');
           } finally {
             els.confirmDeleteBtn.disabled = false;
           }
@@ -413,9 +486,9 @@
 
   async function loadList() {
     try {
-      hideErrorBanner();
+      hideBanner();
       if (window && window.console) {
-        console.log('[tasks] loadList', { page: state.page, pageSize: state.pageSize, sort: state.sort, order: state.order, q: state.q, priority: state.priority });
+        console.log('[tasks] loadList', { page: state.page, pageSize: state.pageSize, sort: state.sort, order: state.order, q: state.q, priorities: state.priorities, tags: state.tags });
       }
       const qParam = state.q && state.q.trim().length > 0 ? `&q=${encodeURIComponent(state.q.trim())}` : '';
       const pParam = (state.priorities || []).map(p => `&priority=${encodeURIComponent(p)}`).join('');
@@ -455,7 +528,7 @@
       }
       updatePager();
     } catch (e) {
-      showErrorBanner('Failed to load tasks.');
+      showBanner('Failed to load tasks.');
       console.error(e);
     }
   }
@@ -493,7 +566,7 @@
 
   async function createTask(evt) {
     evt.preventDefault();
-    hideErrorBanner();
+    hideBanner();
     if (!validateForm()) return;
     const descVal = els.description.value.trim();
     const body = {
@@ -526,13 +599,13 @@
       } else if (res.status === 400) {
         const problem = await res.json().catch(() => ({}));
         const msg = problem?.detail || 'Validation error';
-        showErrorBanner(msg);
+        showBanner(msg);
       } else {
-        showErrorBanner('Failed to create task.');
+        showBanner('Failed to create task.');
       }
     } catch (e) {
       console.error(e);
-      showErrorBanner('Network error while creating task.');
+      showBanner('Network error while creating task.');
     } finally {
       els.saveBtn.disabled = false;
     }
@@ -548,7 +621,7 @@
 
   async function saveEdit(evt) {
     evt.preventDefault();
-    hideErrorBanner();
+    hideBanner();
     if (!validateForm() || !currentEditId) return;
     const descVal = els.description.value.trim();
     const body = {
@@ -572,13 +645,13 @@
       if (!res.ok) {
         if (res.status === 400) {
           const problem = await res.json().catch(() => ({}));
-          showErrorBanner(problem?.detail || 'Validation error');
+          showBanner(problem?.detail || 'Validation error');
         } else if (res.status === 404) {
-          showErrorBanner('Task not found');
+          showBanner('Task not found');
         } else if (res.status === 409) {
-          showErrorBanner('Conflict: task was modified by someone else');
+          showBanner('Conflict: task was modified by someone else');
         } else {
-          showErrorBanner('Failed to save changes.');
+          showBanner('Failed to save changes.');
         }
         return;
       }
@@ -586,7 +659,7 @@
       closeModal();
     } catch (e) {
       console.error(e);
-      showErrorBanner('Network error while saving changes.');
+      showBanner('Network error while saving changes.');
     } finally {
       els.saveBtn.disabled = false;
     }
@@ -613,6 +686,10 @@
     els.priorityDropdown = qs('#priorityDropdown', document);
     els.tagsMenu = qs('#tagsMenu', document);
     els.tagsDropdown = qs('#tagsDropdown', document);
+    els.sortBy = qs('#sortBy', document);
+    els.sortOrder = qs('#sortOrder', document);
+    els.importBtn = qs('#import-btn', document);
+    els.importFile = qs('#importFile', document);
     els.confirmModal = qs('#confirmModal', document);
     els.confirmTitle = qs('#confirmModalLabel', document);
     els.confirmMessage = qs('#confirmMessage', document);
@@ -636,6 +713,19 @@
     });
     els.cancelBtn.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
     els.form.addEventListener('submit', (e) => e.preventDefault());
+
+    if (els.importBtn && els.importFile) {
+      els.importBtn.addEventListener('click', () => {
+        els.importFile.click();
+      });
+      els.importFile.addEventListener('change', async (event) => {
+        const target = event.target;
+        const file = target.files && target.files[0];
+        if (!file) return;
+        await importCsv(file);
+        target.value = '';
+      });
+    }
 
     if (els.sortBy) {
       els.sortBy.value = state.sort;
@@ -663,6 +753,7 @@
     }
     if (els.clearSearch) {
       els.clearSearch.addEventListener('click', () => {
+        hideBanner();
         state.sort = 'createdAt';
         state.order = 'desc';
         if (els.sortBy) els.sortBy.value = 'createdAt';

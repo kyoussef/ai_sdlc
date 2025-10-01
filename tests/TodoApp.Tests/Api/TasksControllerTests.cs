@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -9,6 +11,7 @@ using TodoApp.Api.Controllers;
 using TodoApp.Application.Tasks.Dtos;
 using TodoApp.Application.Tasks.Interfaces;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace TodoApp.Tests.Api;
 
@@ -139,7 +142,7 @@ public class TasksControllerTests
             .ReturnsAsync(new TaskListResponse(new List<TaskDto>(), 1, 100, 0));
         var ctl = new TasksController(_svc.Object);
 
-        var result = await ctl.List(page: 0, pageSize: 999, q: " q ", priority: new[] { TaskPriority.High, TaskPriority.Low }, tag: new[] { " work " }, sort: TaskSortBy.CreatedAt, order: SortOrder.Asc, ct: CancellationToken.None);
+        var result = await ctl.List(page: 0, pageSize: 999, q: " q ", priority: new[] { TaskPriority.High, TaskPriority.Low }, tag: new[] { " work ", "home" }, sort: TaskSortBy.CreatedAt, order: SortOrder.Asc, ct: CancellationToken.None);
 
         captured.Should().NotBeNull();
         captured!.Page.Should().Be(1);
@@ -147,5 +150,31 @@ public class TasksControllerTests
         captured.Q.Should().Be(" q ");
         captured.Priorities!.Should().Contain(new[] { TaskPriority.High, TaskPriority.Low });
         captured.Tags!.Should().Contain(new[] { "work", "home" });
+    }
+
+    [Fact]
+    public async Task Import_WithValidFile_ReturnsSummary()
+    {
+        var summary = new TaskImportResult(2, 0, new List<string>(), new List<Guid>());
+        _svc.Setup(s => s.ImportAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).ReturnsAsync(summary);
+        var ctl = new TasksController(_svc.Object);
+
+        var payload = Encoding.UTF8.GetBytes("title,dueDate,priority\nTask,2025-01-01,Med");
+        using var ms = new MemoryStream(payload);
+        var file = new FormFile(ms, 0, payload.Length, "file", "tasks.csv");
+
+        var result = await ctl.Import(file, CancellationToken.None);
+
+        var ok = result.Result as OkObjectResult;
+        ok.Should().NotBeNull();
+        ok!.Value.Should().Be(summary);
+    }
+
+    [Fact]
+    public async Task Import_NoFile_ReturnsBadRequest()
+    {
+        var ctl = new TasksController(_svc.Object);
+        var result = await ctl.Import(null, CancellationToken.None);
+        result.Result.Should().BeOfType<BadRequestObjectResult>();
     }
 }

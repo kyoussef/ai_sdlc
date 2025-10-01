@@ -1,4 +1,5 @@
-﻿using TodoApp.Application.Tasks.Dtos;
+using System.IO;
+using TodoApp.Application.Tasks.Dtos;
 
 namespace TodoApp.Application.Tasks.Interfaces;
 
@@ -56,4 +57,12 @@ public interface ITaskService
     /// <param name="ct">Cancellation token propagated from the caller.</param>
     /// <returns><c>true</c> when a task was deleted; otherwise <c>false</c>.</returns>
     Task<bool> SoftDeleteAsync(Guid id, CancellationToken ct);
+
+    /// <summary>
+    /// Imports tasks from a CSV stream, validating each row before persistence.
+    /// </summary>
+    /// <param name="csvStream">Readable stream containing CSV content.</param>
+    /// <param name="ct">Cancellation token propagated from the caller.</param>
+    /// <returns>Summary detailing successful inserts and encountered errors.</returns>
+    Task<TaskImportResult> ImportAsync(Stream csvStream, CancellationToken ct);
 }
