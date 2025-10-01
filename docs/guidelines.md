@@ -608,6 +608,244 @@ You can apply the same prompt for the /tests directory to document the test case
 
 ## Best Practices & Advanced Techniques
 
+### MCP Servers 
 
+The Model Context Protocol (MCP) is an open standard for wiring AI apps to external tools, data, and workflows via a consistent, discoverable interface. An MCP server is the process that exposes those capabilities (files, databases, APIs, prompts/tools) to an MCP-capable client so models can discover and call them safely and uniformly.
+
+**Main Usages:**
+
+* Expose tools & data to AI agents (files, DB queries, search, SaaS actions) through one standard instead of bespoke plugins per app. 
+
+* Runtime capability discovery so clients enumerate available tools/resources and use them without custom glue code. 
+
+* Cross-app interoperability (e.g., Claude Desktop, ChatGPT, custom agents) connecting to the same MCP servers. 
+
+* Remote or local integrations over supported transports (stdio, HTTP/WebSocket) for on-prem or cloud systems.
+
+* Standardized prompts/resources alongside tools, enabling reusable, governed building blocks.
+
+**Advantages vs. Typical REST Services**
+
+* One protocol, many capabilities: unify heterogeneous tools and data sources behind a single discovery/calling model, instead of many REST schemas per service. 
+
+* Designed for AI consumption: interfaces (tools/resources/prompts) are structured for LLM agents to understand and call directly, reducing custom wrappers around REST endpoints. 
+
+* Runtime extensibility: users or hosts can add/replace servers at run time—closer to a plugin system than fixed REST integrations. 
+
+* Interoperability across vendors: the same MCP server can be used by multiple AI clients/providers; with REST you typically re-integrate per client. 
+
+* Lower integration overhead for agents: standardized discovery and calling patterns reduce per-service auth/shape quirks common with REST.
+
+In summary and simple words, MCP servers enable the AI agent to use external tools based on a standard protocol. This protocol just exposes the tools to the AI agent with context, and enables it to use the tool as per the user request. 
+
+VS Code IDE has a set of available MCP servers to install and use out of the box. This  is a link to it. https://github.com/mcp?utm_source=vscode-website&utm_campaign=mcp-registry-server-launch-2025
+
+Other IDEs or even the AI Agent has different ways to install and enable MCP servers. 
+
+Lets use Azure DevOps MCP Server, that will enable you AI agent to read, update and create your DevOps backlog, tickets and sprints. 
+
+* Install Azure DevOps MCP Server. The fastest way to do so is to add directory .vscode to your root directory, and add to it file mcp.json. See the attached .vscode/mcp.json file as an example. 
+* Once file is created you need to start the server, either from within the mcp.json file or from the "MCP Servers Installed" View in your IDE.  
+* Then the MCP server will be started and available for the AI Agent, in this case it is Github Copilot. 
+* From Github copilot now you can ask it anything about your DevOps projects, repos, tickets etc... 
+* You can as well see the list of tools available to Github copilot by clickin on the "Configure Tools" in the chat box. 
+
+![Configure Tools](configure_tools.png)
+
+Then view the list of tools. At the top is the number of all selected/enabled tools. You need to make sure this doesn't increase a lot, since this will confuse your AI Agent. Enable only the tools that you need for the current task. 
+
+In the following example, I only kept the built in tools and only enabled "MCP Server: ado", ado is the name I gave to the server, it stands for "Azure DevOps". 
+
+![Configure Tools](configure_tools_2.png)
+
+Now your agent is ready to take your commands. 
+
+**Example Prompt:**
+```text
+list my projects on DevOps
+```
+
+**Example Output:**
+
+You will get a bulleted summary of your projects on DevOps. 
+
+**Example Prompt:**
+```text
+list latest 3 opened tickets on project X
+```
+
+**Example Output:**
+
+You will get a list of opened tickets. 
+
+```markdown
+## Latest 3 Tickets from IDP Project
+
+### Ticket #26737
+- **Title:** Evaluating HuggingFace Yolo Models
+- **Type:** Task
+- **State:** New
+- **Assigned to:** Unassigned
+- **Created:** 2024-11-07T07:51:11.307Z
+- **Last Changed:** 2024-11-15T08:07:05.077Z
+- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26737
+
+### Ticket #26738
+- **Title:** Check Continuous Training on DETR and Detectron2
+- **Type:** Task
+- **State:** New
+- **Assigned to:** Unassigned
+- **Created:** 2024-11-07T07:51:28.203Z
+- **Last Changed:** 2024-11-11T13:25:13.243Z
+- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26738
+
+### Ticket #26736
+- **Title:** Evaluating EfficientDet Kaggle Model
+- **Type:** Task
+- **State:** New
+- **Assigned to:** Unassigned
+- **Created:** 2024-11-07T07:50:58.120Z
+- **Last Changed:** 2024-11-11T13:25:00.410Z
+- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26736
+```
+
+If you recall from the planning phase, this MCP server can play an important role to go and create the fully generated plan on DevOps along with the tickets and the sprints, saving huge amount of time. 
+
+There are other MCP Servers worth checking for your environment like: 
+* **Notion:** Connects your AI agent to the Notion workspace so they can search, retrieve, create and use pages, databases or notes. 
+* **Playwright:** Lets AI agents control a real browser via Playwright navigating pages, clicking elements, taking accessibility snapshots/screenshots, and executing JS—so they can explore apps and even generate/tests through a standardized tool interface.
+* **Github or Atlassian:** Same concept as Azure DevOps. 
+* etc...
+
+With the above tools, you can automate a lot of your tasks, and increase the AI agent knowledge base and context to enable it do a better job. 
+
+
+### AGENTS.md
+
+AGENTS.md is a lightweight, open convention—basically a “README for agents”—you place in a repo’s root to brief AI coding agents on how the project is built, tested, run, and contributed to; it gives tools a predictable place to read instructions and has growing cross-tool support.
+
+**Purpose**
+
+* Provide a single, predictable briefing file for AI agents (build, test, run, conventions). 
+
+* Enable cross-tool use (e.g., Codex, Github Copilot, Cursor, Cline) without rewriting different rule formats. 
+
+* Complement tool-specific instruction files (e.g., Copilot’s .github/copilot-instructions.md).
+
+**Advantages**
+
+* Interoperability: one doc many agents—reduces duplication and drift across tools. 
+
+
+* Discoverability: agents know exactly where to look, improving automation reliability. 
+
+* Cleaner docs: keeps human-oriented README concise while giving agents operational detail. 
+
+* Emerging ecosystem support: VS Code and communities increasingly recognize/use AGENTS.md.
+
+In simple words AGENTS.md provide consistent standards for your AI Agent tool to follow in all its practices or suggestions on the repo. This keeps the agent costantly aligned with the coding standards, styles and conventions, and avoid drifting, without the need to keep reiterating it in every prompt. 
+
+**Example AGENTS.md**
+
+You can find attached a sample of "AGENTS.md" file. I have placed an instruction at the end of the file that says: 
+```text
+# High Priority Agent Protocol
+- All chat responses MUST begin with the prefix: "Hooray, yes sir, on it".
+```
+Now when you prompt the agent to do anything, its response will start with "Hooray, yes sir, on it.". 
+
+This gives you a direct experience on how this file can help you control the overall behavior of your agent regardless of your direct prompt. 
+
+You are encouraged to read more about it, and adopt it to streamline and optimize your AI interactions. Another versions of file "AGENTS.md" can be placed in subfolders for example backend vs. frontend subfolders to provide a more targeted set of instructions per layer. 
+
+### Prompt Optimization and templating
+
+## 1. Standardize Prompt Templates
+- Use consistent structure (system role, context, task, constraints, output format).
+- Break prompts into reusable building blocks (e.g., tone control, formatting instructions).
+- Define parameterized slots (`{input_text}`, `{domain}`, `{style}`) so the same template works across use cases.
+
+**Example:**
+```yaml
+prompt_template:
+  system: "You are a helpful AI assistant specialized in {domain}."
+  user: |
+    Task: {task_description}
+    Input: {input_text}
+    Constraints: {constraints}
+    Output Format: {output_format}
+```
+
+---
+
+## 2. Create a Prompt Library
+- Store prompts in a shared directory or repo (Markdown, JSON, YAML).
+- Include metadata:
+  - Purpose / use case
+  - Model compatibility (GPT-4, Claude, etc.)
+  - Example inputs & outputs
+  - Known limitations
+- Version them like code, so teams can improve and roll back.
+
+---
+
+## 3. Layered Prompting
+- Split prompts into layers:
+  1. System/base prompt: establishes persona & role.
+  2. Reusable instructions: common style/format rules.
+  3. Task-specific template: narrow instructions.
+- Easier to tweak one layer without breaking the rest.
+
+---
+
+## 4. Prompt Chaining
+- Instead of one giant prompt, chain multiple smaller ones:
+  - Step 1: extract entities
+  - Step 2: transform into structured format
+  - Step 3: generate narrative
+- Easier to debug, optimize, and reuse intermediate steps.
+
+---
+
+## 5. Guardrails & Quality Checks
+- Add self-check prompts inside templates:
+  - “Review your output for accuracy, clarity, and compliance before finalizing.”
+- Encourage models to produce explanations + final answer, so you can trim explanations if not needed.
+
+---
+
+## 6. Use Few-Shot & Style Anchors
+- Store canonical examples for tasks (few-shot samples).
+- Anchor desired tone/format with reusable "style snippets" (e.g., bullet summary, JSON output, docstring style).
+
+---
+
+## 7. Parameterize Output Formats
+- Define templates to support multi-format outputs:
+  - Markdown report
+  - JSON structure
+  - Code snippet
+- Makes one prompt usable in different downstream systems.
+
+---
+
+## 8. Prompt Testing & Benchmarking
+- Keep a test harness (like unit tests for prompts):
+  - Run prompts against known inputs/outputs.
+  - Track consistency, failure cases, hallucinations.
+- Compare different versions to measure improvements.
+
+---
+
+## 9. Documentation & Training
+- Document how and when to use each prompt.
+- Provide short “playbooks” for your team:
+  - Good vs. bad examples
+  - Edge cases
+  - Tips for adapting prompts safely
+
+---
+
+✅ With these practices, your team will avoid prompt sprawl, make iterative improvements easier, and ensure high-value prompts are discoverable, reusable, and reliable.
 
 
