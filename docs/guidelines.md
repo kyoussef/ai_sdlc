@@ -689,7 +689,7 @@ You will get a list of opened tickets.
 - **Assigned to:** Unassigned
 - **Created:** 2024-11-07T07:51:11.307Z
 - **Last Changed:** 2024-11-15T08:07:05.077Z
-- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26737
+- **URL:** 
 
 ### Ticket #26738
 - **Title:** Check Continuous Training on DETR and Detectron2
@@ -698,7 +698,7 @@ You will get a list of opened tickets.
 - **Assigned to:** Unassigned
 - **Created:** 2024-11-07T07:51:28.203Z
 - **Last Changed:** 2024-11-11T13:25:13.243Z
-- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26738
+- **URL:** 
 
 ### Ticket #26736
 - **Title:** Evaluating EfficientDet Kaggle Model
@@ -707,7 +707,7 @@ You will get a list of opened tickets.
 - **Assigned to:** Unassigned
 - **Created:** 2024-11-07T07:50:58.120Z
 - **Last Changed:** 2024-11-11T13:25:00.410Z
-- **URL:** https://dev.azure.com/cmeoffshore/_apis/wit/workItems/26736
+- **URL:** 
 ```
 
 If you recall from the planning phase, this MCP server can play an important role to go and create the fully generated plan on DevOps along with the tickets and the sprints, saving huge amount of time. 
