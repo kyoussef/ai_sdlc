@@ -96,10 +96,12 @@ The example implementation uses:
 
 ## 🚀 Getting Started
 
-1. **Read the Guidelines**: Start with `docs/guidelines.md` for the complete methodology
-2. **Explore Examples**: Review the `src/` directory to see AI-generated code in action
-3. **Try the Prompts**: Use prompts from `prompts/` directory with your preferred AI tool
-4. **Adapt to Your Stack**: Modify examples to work with your preferred technologies
+- Go to the [Guidelines document](docs/guidelines.md)
+- Follow the guidelines steps to regenerate the full experience and artifacts of this repo using your own AI Agent and tech stack. 
+- This enforces the steps of the SDLC process
+- This demonstrates how AI agents enhances the analysis, learning and results in each step. 
+- This creates an isolated environment to experiment with different AI tools and practices, mitigating the fear and resistance of messing your current work environment. 
+
 
 ## 🤖 Compatible AI Tools
 
@@ -113,23 +115,6 @@ This methodology works with various AI assistants, it is basically AI tool agnos
 - **Knowledge Transfer** - AI helps capture and share architectural decisions
 - **Reduced Errors** - Automated testing and review processes
 
-## 📝 Usage Examples
-
-### Generate Requirements
-```markdown
-AI Tool: Analyze these initial requirements and generate clarifying questions...
-```
-
-### Create Technical Design
-```markdown
-AI Tool: Based on @final_requirements.md, create a technical architecture...
-```
-
-### Generate Tests
-```markdown
-AI Tool: Create comprehensive unit tests for the TodoApp business logic...
-```
-
 ## 🤝 Contributing
 
 This repository serves as a learning resource and reference implementation. Feel free to:
@@ -138,18 +123,6 @@ This repository serves as a learning resource and reference implementation. Feel
 - Contribute additional prompts and examples
 - Share improvements and lessons learned
 - Report issues or suggest enhancements
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🔗 How to use this repo. 
-
-- Go to the [Guidelines document](docs/guidelines.md)
-- Follow the guidelines steps to regenerate the full experience and artifacts of this repo using your own AI Agent and tech stack. 
-- This enforces the steps of the SDLC process
-- This demonstrates how AI agents enhances the analysis, learning and results in each step. 
-- This creates an isolated environment to experiment with different AI tools and practices, mitigating the fear and resistance of messing your current work environment. 
 
 ---
 
