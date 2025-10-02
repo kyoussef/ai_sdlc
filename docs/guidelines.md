@@ -833,3 +833,16 @@ prompt_template:
 ✅ With these practices, your team will avoid prompt sprawl, make iterative improvements easier, and ensure high-value prompts are discoverable, reusable, and reliable.
 
 
+## Evaluate your results
+
+At the end of this experiment, you want to see how good did you do, you can run a prompt by an AI agent, and ask it to evaluate everything you did so far and identify strength points, and areas for improvement.  
+
+**Example Prompt**
+
+You can find under prompts/evaluate_prompt.md and example prompt to evaluate your overall results across this project. 
+
+**Example Output**
+
+[Evaluation Results](../evaluation_res.md)
+
+Apply something similar to your repository and see if you get better results, and mark down your areas of improvement and try to tackle them. 
