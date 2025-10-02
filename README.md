@@ -99,7 +99,7 @@ The example implementation uses:
 - Go to the [Guidelines document](docs/guidelines.md)
 - Follow the guidelines steps to regenerate the full experience and artifacts of this repo using your own AI Agent and tech stack. 
 - This enforces the steps of the SDLC process
-- This demonstrates how AI agents enhances the analysis, learning and results in each step. 
+- This demonstrates how AI agents enhance the analysis, learning and results in each step. 
 - This creates an isolated environment to experiment with different AI tools and practices, mitigating the fear and resistance of messing your current work environment. 
 
 
