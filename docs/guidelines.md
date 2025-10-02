@@ -190,7 +190,7 @@ flowchart LR
 
 ![Flow Diagram](flow_diagram.png)
 
-### T01 Create Flow (Add â†’ Form â†’ Save)
+### T01 Create task Flow
 ```markdown
 ```mermaid
 sequenceDiagram
