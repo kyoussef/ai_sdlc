@@ -143,12 +143,13 @@ This repository serves as a learning resource and reference implementation. Feel
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🔗 Additional Resources
+## 🔗 How to use this repo. 
 
-- [AI-Driven Development Best Practices](docs/guidelines.md#best-practices--advanced-techniques)
-- [Prompt Engineering Guidelines](prompts/)
-- [Example Implementation](src/)
-- [Test Strategy](tests/)
+- Go to the [Guidelines document](docs/guidelines.md)
+- Follow the guidelines steps to regenerate the full experience and artifacts of this repo using your own AI Agent and tech stack. 
+- This enforces the steps of the SDLC process
+- This demonstrates how AI agents enhances the analysis, learning and results in each step. 
+- This creates an isolated environment to experiment with different AI tools and practices, mitigating the fear and resistance of messing your current work environment. 
 
 ---
 

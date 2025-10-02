@@ -139,7 +139,7 @@ Your context is a final requirements file @final_requirements.md.
 *   Provide 2 estimates, with and without AI tools help. This would give a bit the expectations of the significance of using AI tools for each task.  
 *   Present everything in Markdown so it can be copied into Jira or Azure DevOps.
     
-Store the results in a new file call it â€œplan.mdâ€
+Store the results in a new file call it plan.md
 ```
 
 **Example Output:**
@@ -569,7 +569,8 @@ The following are the steps you need to do to experiment with this practice:
 ![Import Tasks](import_tasks.png)
 
 4- Commit and push the changes. 
-5- Now as the AI to pull the git difference between "master" branch and "import_tasks" and review the changes. 
+
+5- Now ask the AI to pull the git difference between "master" branch and "import_tasks" and review the changes. 
 
 **Example Prompt:**
 
@@ -642,13 +643,13 @@ VS Code IDE has a set of available MCP servers to install and use out of the box
 
 Other IDEs or even the AI Agent has different ways to install and enable MCP servers. 
 
-Lets use Azure DevOps MCP Server, that will enable you AI agent to read, update and create your DevOps backlog, tickets and sprints. 
+Lets use Azure DevOps MCP Server, that will enable your AI agent to read, update and create your DevOps backlog, tickets and sprints. 
 
 * Install Azure DevOps MCP Server. The fastest way to do so is to add directory .vscode to your root directory, and add to it file mcp.json. See the attached .vscode/mcp.json file as an example. 
 * Once file is created you need to start the server, either from within the mcp.json file or from the "MCP Servers Installed" View in your IDE.  
 * Then the MCP server will be started and available for the AI Agent, in this case it is Github Copilot. 
 * From Github copilot now you can ask it anything about your DevOps projects, repos, tickets etc... 
-* You can as well see the list of tools available to Github copilot by clickin on the "Configure Tools" in the chat box. 
+* You can as well see the list of tools available to Github copilot by clicking on the "Configure Tools" in the chat box. 
 
 ![Configure Tools](configure_tools.png)
 
