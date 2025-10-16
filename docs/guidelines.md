@@ -6,7 +6,7 @@ Learn how to adopt and leverage AI tools to optimize every step in the SDLC proc
 
 This isn't an exhaustive list or comprehensive guideline, but it does map out most of the SDLC phases and illustrates how AI can be applied at each stage. The specific tools, prompts, integrations, and configurations may vary, yet the overall approach remains consistent. The key is to unleash your imagination and creativity, and partner with AI at every step to expand your knowledge, sharpen your skills, and amplify your impact.
 
-## Phase 0: Request for proposal
+## Phase 0: Initial Requirements
 The trigger of any SDLC process in a project, is receiving a request from a stakeholder to create a new project or a new feature, or change an existing logic, or a reported bug by a client or QA etc... 
 
 For the context of this guideline or project, the following is the initial requirements. (Can be found attached under docs/initial_requirements.md)
