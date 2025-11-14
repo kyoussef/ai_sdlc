@@ -1,6 +1,31 @@
 ﻿
 # AI-Driven SDLC Guidelines With Hands-On
 
+## Table of Contents
+- [Goal](#goal)
+- [Phase 0: Initial Requirements](#phase-0-initial-requirements)
+- [Phase 1: Requirements & Planning](#phase-1-requirements--planning)
+  - [Overview](#overview)
+  - [Step 1: Clarifying Requirements](#step-1-clarifying-requirements)
+  - [Step 2: Planning](#step-2-planning)
+- [Phase 2: Design & Architecture](#phase-2-design--architecture)
+  - [Overview](#overview-1)
+  - [Example Prompt](#example-prompt)
+  - [Expected Output](#expected-output)
+  - [Components](#components)
+  - [T01 Create task Flow](#t01-create-task-flow)
+- [Phase 3: Development & Coding](#phase-3-development--coding)
+  - [Overview](#overview-2)
+- [Phase 4: Testing & Quality Assurance](#phase-4-testing--quality-assurance)
+  - [Overview](#overview-3)
+- [Phase 5: Code Review](#phase-5-code-review)
+- [Phase 6: Documentation](#phase-6-documentation)
+- [Best Practices & Advanced Techniques](#best-practices--advanced-techniques)
+  - [MCP Servers](#mcp-servers)
+  - [AGENTS.md](#agentsmd)
+  - [Prompt Optimization and templating](#prompt-optimization-and-templating)
+- [Evaluate your results](#evaluate-your-results)
+
 ## Goal
 Learn how to adopt and leverage AI tools to optimize every step in the SDLC process. This guideline provides detailed step by step hands on approach with tool-specific examples, prompts, and best practices. You will learn by applying these steps to build a complete **Todo** service end-to-end using a single **.NET 8 WebAPI** app serving **Razor Views** and **vanilla JavaScript**. The choice of technology is optional, feel free to change the prompts to implement this in whatever technology that fits your target or working environment. 
 
@@ -9,7 +34,7 @@ This isn't an exhaustive list or comprehensive guideline, but it does map out mo
 ## Phase 0: Initial Requirements
 The trigger of any SDLC process in a project, is receiving a request from a stakeholder to create a new project or a new feature, or change an existing logic, or a reported bug by a client or QA etc... 
 
-For the context of this guideline or project, the following is the initial requirements. (Can be found attached under docs/initial_requirements.md)
+For the context of this guideline or project, the following is the initial requirements. (Can be found attached under [docs/initial_requirements.md](./initial_requirements.md))
 
 ``` markdown 
 # Todo App Initial Requirements (MVP)
@@ -51,7 +76,7 @@ The following are the requirements:
 
 ```
 
-On ChatGPT or Gemini which are external tools you can either attach the requirements file and reference it in the requiremnts section in the prompt, and if you are using Codex or Github Copilot which are IDE Extensions, you just need to reference the initial_requirements.md file in your IDE Extension chat box. Agent Mode or Ask/chat mode both works in this case, but if you want to generate a file from the response, then use the Agent mode. 
+On ChatGPT or Gemini which are external tools you can either attach the requirements file and reference it in the requiremnts section in the prompt, and if you are using Codex or Github Copilot which are IDE Extensions, you just need to reference the [initial_requirements.md](./initial_requirements.md) file in your IDE Extension chat box. Agent Mode or Ask/chat mode both works in this case, but if you want to generate a file from the response, then use the Agent mode. 
 
 Pass the prompt to the AI agent, and you should get something like the below. 
 
@@ -83,21 +108,21 @@ Clarifying Questions
 
 These suggested questions can be reveiwed by the human resource, edited, and then shared with the stakeholder to confirm and clarify the scope. This can be an iterative process until both parties agree on the scope. 
 
-Once agreed and finalized with the stakeholders, now you need to merge all the results in the final requirements scope. Pass the initial requirements with the questions and the answers you got from the stakeholders to the AI agent to consolidate and then store back into a file call it "final_requirements.md" under the "docs" directory. (Again this directory structure is used for this project to be shared with others, in your case you might use other document repositories like Notion, Confluence etc..., and you might use **MCP servers** to connect to them directly from your IDE AI agent)
+Once agreed and finalized with the stakeholders, now you need to merge all the results in the final requirements scope. Pass the initial requirements with the questions and the answers you got from the stakeholders to the AI agent to consolidate and then store back into a file call it "[final_requirements.md](./final_requirements.md)" under the "docs" directory. (Again this directory structure is used for this project to be shared with others, in your case you might use other document repositories like Notion, Confluence etc..., and you might use **MCP servers** to connect to them directly from your IDE AI agent)
 
 **Example prompt to consolidate:**
 
 Make sure to replace context with the generated questions and answers from stakholder. 
 
 ```text
-Consolidate the @initial_requirements.md and the generated questions and answers into a new file called final_requirements.md
+Consolidate the [initial_requirements.md](./initial_requirements.md) and the generated questions and answers into a new file called [final_requirements.md](./final_requirements.md)
 Here are the generated questions and answers:
 <context>
 ```
 
 **Expected Output:**
 
-The expected output can be found in the attached "docs/final_requirements.md" file. 
+The expected output can be found in the attached "[docs/final_requirements.md](./final_requirements.md)" file. 
 
 ### Step 2: Planning
 Now after having a set of clear requirements, lets leverage AI agent to help create all the "INVEST" stories, with "Gherkin" acceptance criteria, and some initial estimation (With and Without AI) to get an idea of the size of the effort and help us plan. 
@@ -106,7 +131,7 @@ Having the full requirements, feed a prompt to your AI Agent to create the stori
 
 **Example Prompt:**
 ```markdown
-Your context is a final requirements file @final_requirements.md.
+Your context is a final requirements file [final_requirements.md](./final_requirements.md).
 **Your Task:** Based on these requirements, generate the following deliverables:
 
 1.  **INVEST Stories:** Convert requirements into user stories using the INVEST model (As a , I want , so that ). This should be based on end user UI/UX. 
@@ -139,12 +164,12 @@ Your context is a final requirements file @final_requirements.md.
 *   Provide 2 estimates, with and without AI tools help. This would give a bit the expectations of the significance of using AI tools for each task.  
 *   Present everything in Markdown so it can be copied into Jira or Azure DevOps.
     
-Store the results in a new file call it plan.md
+Store the results in a new file call it [plan.md](./plan.md)
 ```
 
 **Example Output:**
 
-Find attached plan.md as an example output. This saves a lot time to generate this backlog and plan for it, you can either add them mannually to your task management system or even go further to add relevant MCP server to your IDE extensions and enable your AI agent to automatically create the backlog using the MCP Server. You can lookup about Azure DevOps MCP Server, or Notion MCP server etc...
+Find attached [plan.md](./plan.md) as an example output. This saves a lot time to generate this backlog and plan for it, you can either add them mannually to your task management system or even go further to add relevant MCP server to your IDE extensions and enable your AI agent to automatically create the backlog using the MCP Server. You can lookup about Azure DevOps MCP Server, or Notion MCP server etc...
 
 
 
@@ -163,17 +188,17 @@ Again, others might jump directly into impelementation with AI, however it is re
 
 ### Example Prompt: 
 
-Attached under prompts/tech_desing_prompt.md you can find an example prompt that you can generate yourself, or even have AI help you generate it. 
+Attached under [prompts/tech_design_prompt.md](../prompts/tech_design_prompt.md) you can find an example prompt that you can generate yourself, or even have AI help you generate it. 
 The objective of the prompt is to explicitly point to the AI tool to refer to the final requirements file, and the plan file, and use them to come up with a high level technical and architectural suggestions, expressed with textual and visual components, like Mermaid (diagraming language). 
 
-Once you have that long prompt in a file now instruct your AI agent to use it to build the tech document and save it to a new file docs/tech_design_res.md
+Once you have that long prompt in a file now instruct your AI agent to use it to build the tech document and save it to a new file [docs/tech_design_res.md](./tech_design_res.md)
 
 ```text
-Get all the detailed instructions from @tech_design_prompt.md apply it and save your results to file docs/tech_design_res.md
+Get all the detailed instructions from [tech_design_prompt.md](../prompts/tech_design_prompt.md) apply it and save your results to file [docs/tech_design_res.md](./tech_design_res.md)
 ```
 
 ### Expected Output: 
-Attached docs/tech_design_res.md is an example of what output you would get. You might get a different output, make sure to thouroughly read and audit the results, and you might need to do more interactions with the AI tool to fix any issues you find. 
+Attached [docs/tech_design_res.md](./tech_design_res.md) is an example of what output you would get. You might get a different output, make sure to thouroughly read and audit the results, and you might need to do more interactions with the AI tool to fix any issues you find. 
 
 The following is part of the results you will find in the generated doc. 
 ### Components
@@ -243,7 +268,7 @@ As per the recommendations lets  ask the AI Agent to start with the first task "
 ```markdown
 Your task is to implement the Platform Foundations (P1) task for the todo app. 
 
-Follow the architecture and specification document in @tech_design_res.md to create the foundations as per the plan laid out in @plan.md. 
+Follow the architecture and specification document in [tech_design_res.md](./tech_design_res.md) to create the foundations as per the plan laid out in [plan.md](./plan.md). 
 
 Make sure to implement only P1, not the other tasks. 
 ```
@@ -315,7 +340,7 @@ Similarly you can ask the AI agent to go and implement every other task in the p
 This can be used for every of the next tasks. 
 
 ```markdown
-Follow the architecture and specification document in @tech_design_res.md and @plan.md and the current project setup and features and implement the next task T01 that is mentioned in the plan. 
+Follow the architecture and specification document in [tech_design_res.md](./tech_design_res.md) and [plan.md](./plan.md) and the current project setup and features and implement the next task T01 that is mentioned in the plan. 
 ```
 
 The following is an example of the final output. 
@@ -575,13 +600,13 @@ The following are the steps you need to do to experiment with this practice:
 **Example Prompt:**
 
 ```text
-Follow instructions in file @code_review_prompt.md to review code changes between branch "import_tasks" and branch "master" 
-Write your results to new file under docs/review_results.md and include snippets from the git diff to highlight the location of the issue. 
+Follow instructions in file [code_review_prompt.md](../prompts/code_review_prompt.md) to review code changes between branch "import_tasks" and branch "master" 
+Write your results to new file under [docs/review_results.md](./review_results.md) and include snippets from the git diff to highlight the location of the issue. 
 ```
 
 **Example Output:**
 
-Find the output in file docs/review_results.md file, it contain review notes on every change with suggestions. The main risk was in how the CSV was consumed, there are edge cases that are not considered. 
+Find the output in file [docs/review_results.md](./review_results.md) file, it contain review notes on every change with suggestions. The main risk was in how the CSV was consumed, there are edge cases that are not considered. 
 
 
 ## Phase 6: Documentation 
@@ -595,14 +620,14 @@ Example of documentation types are, inline code comments, class/module/function 
 **Example Prompt:**
 
 ```text
-Follow instructions in @document_prompt.md to generate comprehensive documentation for the generated code and tests under /src directory. 
+Follow instructions in [document_prompt.md](../prompts/document_prompt.md) to generate comprehensive documentation for the generated code and tests under /src directory. 
 ```
 
 **Example Output:**
 
 The AI agent shall give you a summary of what it did and you shall review the changes and approve. 
 
-You shall see all the inline and XML string documentations added to all classes and methods, plus the overall README file plus a specific readme file for each layer, plus the API documentation openapi.yaml. 
+You shall see all the inline and XML string documentations added to all classes and methods, plus the overall README file plus a specific readme file for each layer, plus the API documentation [openapi.yaml](./openapi.yaml). 
 
 You can apply the same prompt for the /tests directory to document the test cases as well. 
 
@@ -723,7 +748,7 @@ With the above tools, you can automate a lot of your tasks, and increase the AI 
 
 ### AGENTS.md
 
-AGENTS.md is a lightweight, open convention—basically a “README for agents”—you place in a repo’s root to brief AI coding agents on how the project is built, tested, run, and contributed to; it gives tools a predictable place to read instructions and has growing cross-tool support.
+[AGENTS.md](../AGENTS.md) is a lightweight, open convention—basically a “README for agents”—you place in a repo’s root to brief AI coding agents on how the project is built, tested, run, and contributed to; it gives tools a predictable place to read instructions and has growing cross-tool support.
 
 **Purpose**
 
@@ -742,13 +767,13 @@ AGENTS.md is a lightweight, open convention—basically a “README for agents�
 
 * Cleaner docs: keeps human-oriented README concise while giving agents operational detail. 
 
-* Emerging ecosystem support: VS Code and communities increasingly recognize/use AGENTS.md.
+* Emerging ecosystem support: VS Code and communities increasingly recognize/use [AGENTS.md](../AGENTS.md).
 
-In simple words AGENTS.md provide consistent standards for your AI Agent tool to follow in all its practices or suggestions on the repo. This keeps the agent costantly aligned with the coding standards, styles and conventions, and avoid drifting, without the need to keep reiterating it in every prompt. 
+In simple words [AGENTS.md](../AGENTS.md) provide consistent standards for your AI Agent tool to follow in all its practices or suggestions on the repo. This keeps the agent costantly aligned with the coding standards, styles and conventions, and avoid drifting, without the need to keep reiterating it in every prompt. 
 
 **Example AGENTS.md**
 
-You can find attached a sample of "AGENTS.md" file. I have placed an instruction at the end of the file that says: 
+You can find attached a sample of "[AGENTS.md](../AGENTS.md)" file. I have placed an instruction at the end of the file that says: 
 ```text
 # High Priority Agent Protocol
 - All chat responses MUST begin with the prefix: "Hooray, yes sir, on it".
@@ -757,7 +782,7 @@ Now when you prompt the agent to do anything, its response will start with "Hoor
 
 This gives you a direct experience on how this file can help you control the overall behavior of your agent regardless of your direct prompt. 
 
-You are encouraged to read more about it, and adopt it to streamline and optimize your AI interactions. Another versions of file "AGENTS.md" can be placed in subfolders for example backend vs. frontend subfolders to provide a more targeted set of instructions per layer. 
+You are encouraged to read more about it, and adopt it to streamline and optimize your AI interactions. Another versions of file "[AGENTS.md](../AGENTS.md)" can be placed in subfolders for example backend vs. frontend subfolders to provide a more targeted set of instructions per layer. 
 
 ### Prompt Optimization and templating
 
@@ -839,7 +864,7 @@ At the end of this experiment, you want to see how good did you do, you can run 
 
 **Example Prompt**
 
-You can find under prompts/evaluate_prompt.md an example prompt to evaluate your overall results across this project. 
+You can find under [prompts/evaluate_prompt.md](../prompts/evaluate_prompt.md) an example prompt to evaluate your overall results across this project. 
 
 **Example Output**
 

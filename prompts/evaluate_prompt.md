@@ -54,14 +54,23 @@ For every section, evaluate and provide a **score from 1 (very poor) to 10 (exce
     - Balance between automation (AI-generated) and human refinement.  
 
 ### Output Format
-For each category, provide:  
-- **Score (1–10)**  
-- **Detailed reasoning** (bullet points or short paragraphs).  
+Use the following structure verbatim so responses remain uniform:
+1. Start with the heading `# Evaluation Results`.
+2. Include a Markdown table with columns **Category | Score | Commentary** and the rows listed below in this exact order (rename commentary text as needed, but keep the labels unchanged):
+   - Docs & Prompts  
+   - Code Prompts  
+   - Requirement Coverage  
+   - Creativity  
+   - Architecture  
+   - Security & Compliance  
+   - Testing  
+   - Traceability  
+   - Maintainability  
+   - Professionalism  
+3. After the table, add a bold line `**Overall Score:** X/10` where `X` is the average rounded to one decimal place.
+4. Append the following sections, preserving the headings and providing concise bullet lists:
+   - `## Top Strengths` → 3–4 bullets describing key positives.  
+   - `## Improvement Opportunities` → 3–4 bullets highlighting the most important gaps.  
+   - `## Recommendation` → a single sentence capturing release readiness (e.g., “Needs targeted rework before production”).  
 
-At the end, provide:  
-- **Overall score (average)**  
-- **Top strengths**  
-- **Top improvement opportunities**  
-- **Final professional recommendation** (e.g., "Ready for production after minor refactoring", "Needs significant rework", etc.).  
-
-Be strict but fair: reward clarity, alignment, and professionalism; penalize vagueness, inconsistency, and poor architecture.
+Be strict but fair: reward clarity, alignment, and professionalism; penalize vagueness, inconsistency, and poor architecture. Ensure every response follows the structure above exactly.
