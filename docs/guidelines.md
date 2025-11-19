@@ -797,7 +797,7 @@ prompt_template:
   system: "You are a helpful AI assistant specialized in {domain}."
   user: |
     Task: {task_description}
-    Input: {input_text}
+    Input/Context: {input_text}
     Constraints: {constraints}
     Output Format: {output_format}
 ```
@@ -853,6 +853,24 @@ prompt_template:
   - Good vs. bad examples
   - Edge cases
   - Tips for adapting prompts safely
+
+#### Example using Github Copilot in VS Code
+VS Code supports a feature called prompt files. It enables a team to create a library of standardized and tested prompts that can be reused across the team and event across projects. Check this link for more details. REfer to this link for more details [VS Code Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)
+
+The following is an example on how to leverage such feature to standardize and reuse prompts. 
+
+1. Recommended to create a project layer/directory to host the prompt library. ex. call it "./prompts". Default options are either .github/prompts or "User Data" which is the user local temp directory, and this is only for the user. 
+
+2. Add to VS Code settings your "prompts" directory. Go to the Command Panel, then search for "Chat Settings", then look for "Prompt Files Locations" and add a new location and set it to "./prompts". ![Command Palette](command_palette.png) ![Chat Settings](chat_settings.png) ![Prompt Directory](prompts_templates_location.png)
+
+3. Create a new prompt file. As an example we will create a prompt template that can be used by anyone to review and analyze code difference between any two commits or branches. The team will agree and write this once and then use it everytime. Back to the command palette and look for "New Prompt File", select location "Prompts", give it a name and save, ![Command Palette](command_palette.png) ![New Prompt File](new_prompt_file.png) ![Select Location](select_prompt_location.png) ![Prompt Name](prompt_file_name.png)
+
+4. Now create the prompt content. The prompt provides some metadata at the top (optional), then the prompt. Refer to the link above for more details. It can also include some parameters that can be passed to make the prompt reusable. In our case we want to pass to the prompt fields like (branches vs. commits, branch names vs. commit Ids) to instruct it to get diff between branches or commits and their corresponding references. You can find the full prompt here [Evaluate Code Changes Prompt Template](../prompts/evaluate_code_changes.prompt.md).
+Snippet of the prompt: 
+![Prompt Snippet](prompt_snippet.png)
+
+5. Run the prompt when needed. To run a prompt with parameters, go to the chat bot input box, and use the forward slash "/" and then type the name of the prompt template and add the parameters. Example to run for commits between 2 ids. 
+![Run Prompt](run_prompt.png)
 
 
 ✅ With these practices, your team will avoid prompt sprawl, make iterative improvements easier, and ensure high-value prompts are discoverable, reusable, and reliable.
