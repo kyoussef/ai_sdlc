@@ -25,6 +25,8 @@
   - [AGENTS.md](#agentsmd)
   - [Prompt Optimization and templating](#prompt-optimization-and-templating)
 - [Evaluate your results](#evaluate-your-results)
+- [One more time](#one-more-time)
+
 
 ## Goal
 Learn how to adopt and leverage AI tools to optimize every step in the SDLC process. This guideline provides detailed step by step hands on approach with tool-specific examples, prompts, and best practices. You will learn by applying these steps to build a complete **Todo** service end-to-end using a single **.NET 8 WebAPI** app serving **Razor Views** and **vanilla JavaScript**. The choice of technology is optional, feel free to change the prompts to implement this in whatever technology that fits your target or working environment. 
@@ -889,3 +891,7 @@ You can find under [prompts/evaluate_prompt.md](../prompts/evaluate_prompt.md) a
 [Evaluation Results](../evaluation_res.md)
 
 Apply something similar to your repository and see if you get better results, and mark down your areas of improvement and try to tackle them. 
+
+## One more time
+
+Now after you have evaluated your results and learned your areas of improvement along other advanced techniques, you are highly encouraged to go over your repo one more time, and apply the fixes and the advanced techniques you learned and re-evaluate and see if you get better results. 
