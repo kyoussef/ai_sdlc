@@ -854,12 +854,12 @@ prompt_template:
   - Edge cases
   - Tips for adapting prompts safely
 
-#### Example using Github Copilot in VS Code
-VS Code supports a feature called prompt files. It enables a team to create a library of standardized and tested prompts that can be reused across the team and event across projects. Check this link for more details. REfer to this link for more details [VS Code Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)
+#### Example using VS Code Prompt Files Feature
+VS Code supports a feature called prompt files. It enables a team to create a library of standardized and tested prompts that can be reused across the team and event across projects. Check this link for more details. [VS Code Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)
 
 The following is an example on how to leverage such feature to standardize and reuse prompts. 
 
-1. Recommended to create a project layer/directory to host the prompt library. ex. call it "./prompts". Default options are either .github/prompts or "User Data" which is the user local temp directory, and this is only for the user. 
+1. Recommended to create a project layer/directory to host the prompt library. ex. call it "./prompts". Default options are either .github/prompts or "User Data" which is the user local temp directory. Conveniently you can create a project level prompts directory. In this example create a new directory under your project root directory and all it "prompts".  
 
 2. Add to VS Code settings your "prompts" directory. Go to the Command Panel, then search for "Chat Settings", then look for "Prompt Files Locations" and add a new location and set it to "./prompts". ![Command Palette](command_palette.png) ![Chat Settings](chat_settings.png) ![Prompt Directory](prompts_templates_location.png)
 
