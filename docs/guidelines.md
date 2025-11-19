@@ -33,6 +33,10 @@ Learn how to adopt and leverage AI tools to optimize every step in the SDLC proc
 
 This isn't an exhaustive list or comprehensive guideline, but it does map out most of the SDLC phases and illustrates how AI can be applied at each stage. The specific tools, prompts, integrations, and configurations may vary, yet the overall approach remains consistent. The key is to unleash your imagination and creativity, and partner with AI at every step to expand your knowledge, sharpen your skills, and amplify your impact.
 
+> **⚠️ SECURITY NOTICE** 
+> 
+> **Please make sure any AI agent tool you are using is licensed and approved by your organization and clients, to avoid any security and private data breaches.**
+
 ## Phase 0: Initial Requirements
 The trigger of any SDLC process in a project, is receiving a request from a stakeholder to create a new project or a new feature, or change an existing logic, or a reported bug by a client or QA etc... 
 
@@ -746,6 +750,11 @@ There are other MCP Servers worth checking for your environment like:
 * etc...
 
 With the above tools, you can automate a lot of your tasks, and increase the AI agent knowledge base and context to enable it do a better job. 
+
+
+> **⚠️ SECURITY NOTICE** 
+> 
+> **Please make sure to consult your IT administrator to get you licensed and approved access to any MCP tool that is needed. This is crucial to maintain secure access to your code base and avoid any data leakage**
 
 
 ### AGENTS.md
