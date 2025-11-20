@@ -884,6 +884,12 @@ Snippet of the prompt:
 ![Run Prompt](run_prompt.png)
 
 
+> **💡 Note**
+> 
+> If you're using a different IDE or AI tool, look for similar prompt template/library features, and if it is not supported out of the box, it is still possible to maintain your own prompts directory and call them or reference them from you AI tool. 
+
+
+
 ✅ With these practices, your team will avoid prompt sprawl, make iterative improvements easier, and ensure high-value prompts are discoverable, reusable, and reliable.
 
 
